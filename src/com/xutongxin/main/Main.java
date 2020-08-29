@@ -9,19 +9,20 @@ import java.util.*;
 
 
 
-public class main {
+public class Main {
 
     public static void main(String[] args) throws IOException
     {
-
+        //String fileroad="C://Users//xtx//Documents//a.txt";
+        String fileroad="E://a.txt";
         //BufferedReader是可以按行读取文件
-        FileInputStream inputStream = new FileInputStream("C://Users//xtx//Documents//a.txt");
+        FileInputStream inputStream = new FileInputStream(fileroad);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         String str = null;
         while((str = bufferedReader.readLine()) != null)
         {
-            System.out.println(str);
+            System.out.println(str.charAt(1));
         }
 
         //close
@@ -29,5 +30,14 @@ public class main {
         bufferedReader.close();
 
     }
-
+    public static void run(String str)
+    {
+        switch (str.charAt(0)) {
+            case ' ':
+                System.out.println("你的编程规范呢");
+            case 'd':
+                
+        }
+        }
+    }
 }
