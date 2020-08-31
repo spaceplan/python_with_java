@@ -74,3 +74,4 @@ fabric.properties
 
 .idea/libraries/
 #out/production/python with java/Test.class
+/out/
