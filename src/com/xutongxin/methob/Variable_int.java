@@ -11,7 +11,7 @@ public class Variable_int {
     }
 
     public static void setValue(String name, int value) {
-        Variable_int.put(name,value);
+        Variable_int.put(name.trim(),value);
     }
     public static void printValue(){System.out.println(Variable_int);}
 }

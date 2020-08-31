@@ -11,7 +11,7 @@ public class Function {
     }
 
     public static void setFunction(String name, int locate) {
-        function.put(name,locate);
+        function.put(name.trim(),locate);
     }
     public static void printValue(){System.out.println(function);}
     public static void main(String[] args) {

@@ -13,8 +13,8 @@ public class Main {
     public static int line = 1, begin = 0, ifword = 0, tab = 0;
 
     public static void main(String[] args) throws IOException {
-        String fileroad="C://GitProject//python_with_java//test.py";
-        //String fileroad = "E://a.txt";
+        //String fileroad="C://GitProject//python_with_java//test.py";
+        String fileroad="E://GitProject//python_with_java//test.py";
         //BufferedReader是可以按行读取文件
         FileInputStream inputStream = new FileInputStream(fileroad);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -34,23 +34,34 @@ public class Main {
     }
     public static void prepare(String str) {
 
-        if (str.charAt(0) == '\t' || str.charAt(0) == '\n')
-            return;
+        if ( str.equals("")||str.charAt(0) == ' ')
+        return;
         switch (str.charAt(0)) {
             case 'd':
-                if (str.substring(0, 4).equals("def "))
-                    Function.setFunction(str.substring(4, str.indexOf("(")), line);break;
-
+                if (str.length()>3&&str.substring(0, 4).equals("def ")) {
+                    Function.setFunction(str.substring(4, str.indexOf("(")), line);
+                    break;
+                }
+                else
+                    Variable_int.setValue(str.substring(0, str.indexOf("=")), Integer.parseInt((str.substring(str.indexOf("=")+1)).trim()));break;
             case 'i':
-                if ("if __name__ == \"__main__\":" == str.substring(0, 26))
-                    begin = line;break;
+                if (str.length()>25&&"if __name__ == '__main__':".equals(str.substring(0, 26)))
+                    begin = line;
+                else
+                    Variable_int.setValue(str.substring(0, str.indexOf("=")), Integer.parseInt((str.substring(str.indexOf("=")+1)).trim()));
+                    break;
             default: {
                 //System.out.println(str.charAt(3));
-                Variable_int.setValue(str.substring(0, str.indexOf("=")), Integer.valueOf(str.substring(str.indexOf("=")+1)));break;
+                Variable_int.setValue(str.substring(0, str.indexOf("=")), Integer.parseInt((str.substring(str.indexOf("=")+1)).trim()));break;
+
 
             }
 
         }
+    }
+    public  static void Prepare_Variable(String str)
+    {
+
     }
 /*
     public static void run(String str) {
