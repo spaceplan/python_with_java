@@ -1,11 +1,10 @@
 package com.xutongxin.methob;
 
-import com.xutongxin.methob.Expression;
 public class Compare {
     public static boolean run(String str)
     {
         str=str.trim();
-        int i=0;
+        //int i=0;
         //boolean and=false,or=false;
         if(str.contains("and"))
             return run(str.substring(0,str.indexOf("and")))&&run(str.substring(str.indexOf("and")+3));
@@ -17,13 +16,26 @@ public class Compare {
             if (str.contains("=="))
                 return Expression.run(str.substring(0, str.indexOf("=="))) == Expression.run(str.substring(str.indexOf("==") + 2));
             if (str.contains(">="))
-                return Expression.run(str.substring(0, str.indexOf("=="))) >= Expression.run(str.substring(str.indexOf("==") + 2));
+                return Expression.run(str.substring(0, str.indexOf(">="))) >= Expression.run(str.substring(str.indexOf(">=") + 2));
             if (str.contains("<="))
-                return Expression.run(str.substring(0, str.indexOf("=="))) >= Expression.run(str.substring(str.indexOf("==") + 2));
+                return Expression.run(str.substring(0, str.indexOf("<="))) <= Expression.run(str.substring(str.indexOf("<=") + 2));
             if (str.contains("!="))
-                return Expression.run(str.substring(0, str.indexOf("!="))) >= Expression.run(str.substring(str.indexOf("==") + 2));
+                return Expression.run(str.substring(0, str.indexOf("!="))) != Expression.run(str.substring(str.indexOf("!=") + 2));
+            wrong(str);
+            System.exit(-1);
 
         }
+
+        if (str.contains(">"))
+            return Expression.run(str.substring(0, str.indexOf(">"))) > Expression.run(str.substring(str.indexOf(">") + 1));
+        if (str.contains("<"))
+            return Expression.run(str.substring(0, str.indexOf("<"))) < Expression.run(str.substring(str.indexOf("<") + 1));
+        //处理判断
+        wrong(str);
+        System.exit(-1);
         return true;
+    }
+    public static void wrong(String str) {
+        System.out.println(str + " 比较语句语法错误");
     }
 }
