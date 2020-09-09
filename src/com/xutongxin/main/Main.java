@@ -3,7 +3,7 @@ package com.xutongxin.main;
 import com.xutongxin.methob.Function;
 import com.xutongxin.methob.Variable_int;
 import com.xutongxin.methob.Compare;
-
+import com.xutongxin.methob.Expression;
 import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static int line = 1, begin = 0, tab = 0, line_all = 1;
-    public static boolean[] ifword;
+    public static boolean[] ifword=new boolean[100];
     private static final String fileroad = "C://GitProject//python_with_java//test.py";
     public static ArrayList<String> file= new ArrayList<String>();
 
@@ -81,8 +81,12 @@ public class Main {
 
     public static void setValue(String str) {
         try {
-            Variable_int.setValue(str.substring(0, str.indexOf("=")), Integer.parseInt((str.substring(str.indexOf("=") + 1)).trim()));
-        } catch (StringIndexOutOfBoundsException e) {
+            str=str.trim();
+            String Valuename=str.substring(0, str.indexOf("="));
+            int value=Expression.run((str.substring(str.indexOf("=") + 1)));
+            Variable_int.setValue(Valuename, value);
+        } catch (StringIndexOutOfBoundsException e)
+        {
             System.out.println("第 " + line + " 行赋值时出现问题，请检查");
             System.exit(101);
         }
@@ -92,27 +96,29 @@ public class Main {
     public static void run(String str) {
         if(str.equals(""))
             return;
-        while(tab != 1 && str.charAt(tab * 4) != ' ') {
+        while(tab != 1 && str.charAt(tab * 4-1) != ' ') {
             if(ifword[tab])
                 ifword[tab]=false;
             tab=tab-1;
-            return;
         }
         switch (str.charAt(tab * 4)) {
+            case ' ':
             case '#':
                 return;
             case 'i': {
-                if ("if".equals(str.substring(0, 2))) {
-                    tab += 1;
+                if ("if".equals(str.substring(tab*4, tab*4+2))) {
+
                     ifword[tab] = true;
-                    Compare.run(str.substring(tab * 4 + 2, str.indexOf(":")).trim());
+                    if(Compare.run(str.substring(tab * 4 + 2, str.indexOf(":"))))
+                        tab += 1;
+                    return;
 
                 } else
                     setValue(str);
                 break;
             }
             case 'e': {
-                if ("elif".equals(str.substring(0, 4))) {
+                if ("elif".equals(str.substring(tab*4, tab*4+4))) {
                     if (!ifword[tab]) {
                         wrong();
                         return;
@@ -120,7 +126,7 @@ public class Main {
                     tab += 1;
                     ifword[tab] = true;
 
-                } else if ("else".equals(str.substring(0, 4))) {
+                } else if ("else".equals(str.substring(tab*4, tab*4+4))) {
                     if (!ifword[tab]) {
                         wrong();
                         return;
@@ -149,7 +155,7 @@ public class Main {
 
     public static void readline(Integer from, Integer to)  {
         tab = 1;
-        int line = from;
+        line = from;
         String str=null;
         while (to >= line) {
             str = file.get(line);
@@ -165,13 +171,6 @@ public class Main {
     public static void print(String str) {
         System.out.println(str);
     }
-    public static boolean isNumeric(String str) {
-        String bigStr;
-        try {
-            bigStr = new BigDecimal(str).toString();
-        } catch (Exception e) {
-            return false;//异常 说明包含非数字。
-        }
-        return true;
-    }
+
+
 }

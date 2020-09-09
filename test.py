@@ -1,6 +1,8 @@
-a=1
 if __name__ == '__main__':
-    print("Hello world")
-    a=2
-
-    print("Hello world")
+    a=1*3
+    if a==3:
+        if a==2:
+            print("Hello world")
+        if a==3:
+            print("Hello world")
+    print("Helo")
