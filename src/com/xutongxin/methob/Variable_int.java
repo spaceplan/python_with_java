@@ -14,4 +14,5 @@ public class Variable_int {
         Variable_int.put(name.trim(),value);
     }
     public static void printValue(){System.out.println(Variable_int);}
+    public static boolean check(String str){return Variable_int.containsKey(str);}
 }

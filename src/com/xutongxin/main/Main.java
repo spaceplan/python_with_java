@@ -4,16 +4,21 @@ import com.xutongxin.methob.Function;
 import com.xutongxin.methob.Variable_int;
 import com.xutongxin.methob.Compare;
 import com.xutongxin.methob.Expression;
+
+import javax.swing.*;
 import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Main {
     public static int line = 1, begin = 0, tab = 0, line_all = 1;
-    public static boolean[] ifword=new boolean[100];
+    public static boolean[] ifword = new boolean[100];
     private static final String fileroad = "C://GitProject//python_with_java//test.py";
-    public static ArrayList<String> file= new ArrayList<String>();
+    public static ArrayList<String> file = new ArrayList<String>();
+    public static Map<Integer,Integer> whilelist = new HashMap();
 
     //private final String fileroad="E://GitProject//python_with_java//test.py";
     public static void main(String[] args) throws IOException {
@@ -30,7 +35,7 @@ public class Main {
             prepare(str);
             line = line + 1;
         }
-        line_all=line-1;
+        line_all = line - 1;
         if (begin == 0) {
             System.out.println("没有初始化程序的 if __name__ == '__main__': 语句");
             System.exit(100);
@@ -43,8 +48,8 @@ public class Main {
         print(String.valueOf(line_all));
         // 完成初始化，开始读行
         line = 1;
-        tab=1;
-        readline(begin+1,line_all);
+        tab = 1;
+        readline(begin + 1, line_all);
         Variable_int.printValue();
     }
 
@@ -81,12 +86,11 @@ public class Main {
 
     public static void setValue(String str) {
         try {
-            str=str.trim();
-            String Valuename=str.substring(0, str.indexOf("="));
-            int value=Expression.run((str.substring(str.indexOf("=") + 1)));
+            str = str.trim();
+            String Valuename = str.substring(0, str.indexOf("="));
+            int value = Expression.run((str.substring(str.indexOf("=") + 1)));
             Variable_int.setValue(Valuename, value);
-        } catch (StringIndexOutOfBoundsException e)
-        {
+        } catch (StringIndexOutOfBoundsException e) {
             System.out.println("第 " + line + " 行赋值时出现问题，请检查");
             System.exit(101);
         }
@@ -94,22 +98,30 @@ public class Main {
     }
 
     public static void run(String str) {
-        if(str.equals(""))
+        if (str.equals(""))
             return;
-        while(tab != 1 && str.charAt(tab * 4-1) != ' ') {
-            if(ifword[tab])
-                ifword[tab]=false;
-            tab=tab-1;
+        while (tab != 1 && str.charAt(tab * 4 - 1) != ' ') {
+            if (whilelist.containsKey(tab))
+            {
+
+                line=whilelist.get(tab)-1;
+                whilelist.remove(tab);
+                tab-=1;
+                return;
+            }
+            if (ifword[tab])
+                ifword[tab] = false;
+            tab = tab - 1;
         }
         switch (str.charAt(tab * 4)) {
             case ' ':
             case '#':
                 return;
             case 'i': {
-                if ("if".equals(str.substring(tab*4, tab*4+2))) {
+                if ("if".equals(str.substring(tab * 4, tab * 4 + 2))) {
 
                     ifword[tab] = true;
-                    if(Compare.run(str.substring(tab * 4 + 2, str.indexOf(":"))))
+                    if (Compare.run(str.substring(tab * 4 + 2, str.indexOf(":"))))
                         tab += 1;
                     return;
 
@@ -118,7 +130,7 @@ public class Main {
                 break;
             }
             case 'e': {
-                if ("elif".equals(str.substring(tab*4, tab*4+4))) {
+                if ("elif".equals(str.substring(tab * 4, tab * 4 + 4))) {
                     if (!ifword[tab]) {
                         wrong();
                         return;
@@ -126,7 +138,7 @@ public class Main {
                     tab += 1;
                     ifword[tab] = true;
 
-                } else if ("else".equals(str.substring(tab*4, tab*4+4))) {
+                } else if ("else".equals(str.substring(tab * 4, tab * 4 + 4))) {
                     if (!ifword[tab]) {
                         wrong();
                         return;
@@ -139,10 +151,24 @@ public class Main {
             }
 
             case 'p': {
-                if (str.substring(tab*4, tab*4+6).equals("print("))
-                    System.out.println(str.substring(tab*4+7, str.indexOf(")")-1));
+                if (str.substring(tab * 4, tab * 4 + 6).equals("print("))
+                    System.out.println(str.substring(tab * 4 + 7, str.indexOf(")") - 1));
 
                 else
+                    setValue(str);
+                break;
+            }
+            case 'w': {
+                if (str.substring(tab * 4, tab * 4 + 6).equals("while ")) {
+                    if (Compare.run(str.substring(tab * 4 + 6, str.indexOf(':')))) {
+
+                        tab += 1;
+                        whilelist.put(tab,line);
+
+                    }
+                    else
+                        return;
+                } else
                     setValue(str);
                 break;
             }
@@ -153,14 +179,21 @@ public class Main {
         }
     }
 
-    public static void readline(Integer from, Integer to)  {
+    public static void readline(Integer from, Integer to) {
         tab = 1;
         line = from;
-        String str=null;
+        String str = null;
         while (to >= line) {
             str = file.get(line);
             run(str);
-            line = line + 1;
+            if(line==to&&whilelist.containsKey(tab))
+            {
+                line=whilelist.get(tab);
+                whilelist.remove(tab);
+                tab-=1;
+            }
+            else
+                line = line + 1;
         }
     }
 
