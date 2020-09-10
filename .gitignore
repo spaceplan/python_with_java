@@ -73,6 +73,6 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 .idea/libraries/
-#out/production/python with java/Test.class
+/out/production/python with java/com/xutongxin/main/Main.class
 /out/
 src/com/xutongxin/test/
