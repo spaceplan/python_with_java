@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 public class Main {
-    public static int line = 1, begin = 0, tab = 0, line_all = 1;
+    public static int line = 1, begin = 0, tab = 0, line_all = 1,defnumber=0;
     public static boolean[] ifword = new boolean[100];
     private static final String fileroad = "C://GitProject//python_with_java//test.py";
     public static ArrayList<String> file = new ArrayList<String>();
@@ -117,8 +117,45 @@ public class Main {
             case ' ':
             case '#':
                 return;
+            case 'b':
+            {
+                if (str.length()>tab*4+4&&"break".equals(str.substring(tab * 4, tab * 4 + 5))) {
+                    int i=whileserch(tab);
+                    if(i==0)
+                        wrong();
+                    else
+                    {
+                        whilelist.remove(i);
+                        tab=i-1;
+                        return;
+                    }
+                }
+                else
+                    setValue(str);
+                return;
+
+
+            }
+            case 'c':
+            {
+                if (str.length()>tab*4+7&&"continue".equals(str.substring(tab * 4, tab * 4 + 8))) {
+                    int i=whileserch(tab);
+                    if(i==0)
+                        wrong();
+                    else
+                    {
+                        line=whilelist.get(i)-1;
+                        whilelist.remove(i);
+                        tab=i;
+                        return;
+                    }
+                }
+                else
+                    setValue(str);
+                return;
+            }
             case 'i': {
-                if ("if".equals(str.substring(tab * 4, tab * 4 + 2))) {
+                if (str.length()>tab*4+1&&"if".equals(str.substring(tab * 4, tab * 4 + 2))) {
 
                     ifword[tab] = true;
                     if (Compare.run(str.substring(tab * 4 + 2, str.indexOf(":"))))
@@ -130,7 +167,7 @@ public class Main {
                 break;
             }
             case 'e': {
-                if ("elif".equals(str.substring(tab * 4, tab * 4 + 4))) {
+                if (str.length()>tab*4+3&&"elif".equals(str.substring(tab * 4, tab * 4 + 4))) {
                     if (!ifword[tab]) {
                         wrong();
                         return;
@@ -138,7 +175,7 @@ public class Main {
                     tab += 1;
                     ifword[tab] = true;
 
-                } else if ("else".equals(str.substring(tab * 4, tab * 4 + 4))) {
+                } else if (str.length()>tab*4+3&&"else".equals(str.substring(tab * 4, tab * 4 + 4))) {
                     if (!ifword[tab]) {
                         wrong();
                         return;
@@ -151,7 +188,7 @@ public class Main {
             }
 
             case 'p': {
-                if (str.substring(tab * 4, tab * 4 + 6).equals("print("))
+                if (str.length()>tab*4+5&&str.substring(tab * 4, tab * 4 + 6).equals("print("))
                     System.out.println(str.substring(tab * 4 + 7, str.indexOf(")") - 1));
 
                 else
@@ -159,7 +196,7 @@ public class Main {
                 break;
             }
             case 'w': {
-                if (str.substring(tab * 4, tab * 4 + 6).equals("while ")) {
+                if (str.length()>tab*4+5&&str.substring(tab * 4, tab * 4 + 6).equals("while ")) {
                     if (Compare.run(str.substring(tab * 4 + 6, str.indexOf(':')))) {
 
                         tab += 1;
@@ -196,9 +233,20 @@ public class Main {
                 line = line + 1;
         }
     }
-
+    public static Integer whileserch(Integer i)
+    {
+        while(i>1)
+        {
+            if(whilelist.containsKey(i))
+                return i;
+            else
+                i-=1;
+        }
+        return 0;
+    }
     public static void wrong() {
         System.out.println(line + " 行语法错误");
+        System.exit(102);
     }
 
     public static void print(String str) {
