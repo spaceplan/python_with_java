@@ -88,7 +88,24 @@ public class Main {
         try {
             str = str.trim();
             String Valuename = str.substring(0, str.indexOf("="));
-            int value = Expression.run((str.substring(str.indexOf("=") + 1)));
+            String Valuestr=str.substring(str.indexOf("=") + 1);
+            /*
+            if(Valuename.contains(","))
+            {
+                int i1,i2;
+                i1=Valuename.indexOf(",");
+                i2=Valuestr.indexOf(",");
+                while(i1!=-1)
+                {
+                    Variable_int.setValue(Valuename.substring(0,i1), Expression.run(Valuestr.substring(0,i2)));
+                    i1=Valuename.indexOf(",",i1);
+                    i2=Valuestr.indexOf(",",i2);
+                }
+
+
+            }
+            */
+            int value = Expression.run(Valuestr);
             Variable_int.setValue(Valuename, value);
         } catch (StringIndexOutOfBoundsException e) {
             System.out.println("第 " + line + " 行赋值时出现问题，请检查");
