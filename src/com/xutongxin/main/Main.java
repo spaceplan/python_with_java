@@ -16,7 +16,7 @@ import java.util.Map;
 public class Main {
     public static int line = 1, begin = 0, tab = 0, line_all = 1,defnumber=0;
     public static boolean[] ifword = new boolean[100];
-    private static final String fileroad = "C://GitProject//python_with_java//test.py";
+    private static final String fileroad = "E://GitProject//python_with_java//test.py";
     public static ArrayList<String> file = new ArrayList<String>();
     public static Map<Integer,Integer> whilelist = new HashMap();
 
@@ -117,6 +117,8 @@ public class Main {
     public static void run(String str) {
         if (str.equals(""))
             return;
+        if(str.contains("#"))
+            str=str.substring(0,str.indexOf("#"));
         while (tab != 1 && str.charAt(tab * 4 - 1) != ' ') {
             if (whilelist.containsKey(tab))
             {
