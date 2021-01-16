@@ -45,6 +45,7 @@ public class Main {
         Function.printValue();
 
         System.out.println(begin);
+        
         print(String.valueOf(line_all));
         // 完成初始化，开始读行
         line = 1;

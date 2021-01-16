@@ -8,16 +8,16 @@ public class Expression {
     public static int run(String str)
     {
         str=str.trim();
+        if(str.contains("+"))
+            return run(str.substring(0,str.indexOf("+")))+run(str.substring(str.indexOf("+")+1));
+        if(str.contains("-"))
+            return run(str.substring(0,str.indexOf("-")))-run(str.substring(str.indexOf("-")+1));
         if(str.contains("*"))
             return run(str.substring(0,str.indexOf("*")))*run(str.substring(str.indexOf("*")+1));
         if(str.contains("/"))
             return run(str.substring(0,str.indexOf("/")))/run(str.substring(str.indexOf("/")+1));
         if(str.contains("%"))
             return run(str.substring(0,str.indexOf("%")))%run(str.substring(str.indexOf("%")+1));
-        if(str.contains("+"))
-            return run(str.substring(0,str.indexOf("+")))+run(str.substring(str.indexOf("+")+1));
-        if(str.contains("-"))
-            return run(str.substring(0,str.indexOf("-")))-run(str.substring(str.indexOf("-")+1));
         if(isNumeric(str))
             return Integer.valueOf(str);
         else if (Variable_int.check(str))
